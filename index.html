@@ -1264,6 +1264,17 @@
           <span class="pm-plain">Khaki</span>
         </div>
       </div>
+
+      <!-- Submit Review — anchored to bottom of left panel, always visible -->
+      <div style="padding:12px 16px;border-top:1px solid #e5e7eb;flex-shrink:0;background:#fff;">
+        <div style="margin-bottom:8px;display:flex;justify-content:space-between;font-size:12px;font-weight:600;">
+          <span style="color:#027a48;">● <span id="status-approved-left">96</span> approved</span>
+          <span style="color:#e02020;">● <span id="status-rejected-left">0</span> rejected</span>
+        </div>
+        <button onclick="submitReview()" id="submit-btn-left" style="width:100%;padding:10px 0;background:#0071ce;color:#fff;border:none;border-radius:24px;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.15s;">
+          Submit Review
+        </button>
+      </div>
     </aside>
 
     <!-- RIGHT PANEL -->
@@ -1597,6 +1608,11 @@
 
     const assetCountTitle = document.getElementById('asset-count-title');
     if (assetCountTitle) assetCountTitle.textContent = total;
+
+    const la = document.getElementById('status-approved-left');
+    const lr = document.getElementById('status-rejected-left');
+    if (la) la.textContent = approved;
+    if (lr) lr.textContent = rejected;
 
     document.getElementById('footer-approved').textContent = approved;
     document.getElementById('footer-rejected').textContent  = rejected;
