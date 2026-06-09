@@ -1631,9 +1631,17 @@
   function submitReview() {
     const approved = TOTAL_CARDS - rejectedCards.size;
     const rejected = rejectedCards.size;
+
+    // Disable both the legacy button and the nuclear button
     const btn = document.getElementById('approve-btn');
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
+    const nuclearBtn = document.getElementById('nuclear-submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+    if (nuclearBtn) {
+      nuclearBtn.disabled = true;
+      nuclearBtn.textContent = 'Submitting…';
+      nuclearBtn.style.background = '#005fa3';
+      nuclearBtn.style.cursor = 'default';
+    }
 
     // Highlight approved cards immediately on click
     document.querySelectorAll('.asset-card').forEach(card => {
@@ -1645,8 +1653,10 @@
 
     setTimeout(() => {
       showToast(`Review submitted! ${approved} assets approved, ${rejected} rejected.`);
-      btn.disabled = false;
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Submit Review`;
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Submit Review`;
+      }
       rejectedCards.clear();
       updateStats();
       setTimeout(() => {
