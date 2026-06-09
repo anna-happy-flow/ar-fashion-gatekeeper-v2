@@ -1274,26 +1274,6 @@
     </main>
   </div>
 
-  <!-- Status bar: floats above footer, no overlap -->
-  <div class="review-status-bar" id="review-status-bar" aria-live="polite" aria-label="Review status">
-    <div class="status-approved">
-      <span class="status-dot status-dot-green" aria-hidden="true"></span>
-      <span id="footer-approved">96</span> approved
-    </div>
-    <div class="status-rejected">
-      <span class="status-dot status-dot-red" aria-hidden="true"></span>
-      <span id="footer-rejected">0</span> rejected
-    </div>
-  </div>
-
-  <!-- Submit Footer -->
-  <footer class="approve-footer hidden" id="approve-footer" aria-label="Review submission footer">
-    <div class="footer-btn-group">
-      <button class="approve-btn" id="approve-btn" onclick="submitReview()">
-        Submit Review
-      </button>
-    </div>
-  </footer>
 
   <!-- ════════════════════════════════════
        VIEW 3: ERROR BUCKET
@@ -1376,6 +1356,26 @@
   </div>
 
 </div><!-- /page-content -->
+
+<!-- Status bar + Footer: outside page-content so position:fixed is never broken by parent transforms -->
+<div class="review-status-bar" id="review-status-bar" aria-live="polite" aria-label="Review status">
+  <div class="status-approved">
+    <span class="status-dot status-dot-green" aria-hidden="true"></span>
+    <span id="footer-approved">96</span> approved
+  </div>
+  <div class="status-rejected">
+    <span class="status-dot status-dot-red" aria-hidden="true"></span>
+    <span id="footer-rejected">0</span> rejected
+  </div>
+</div>
+
+<footer class="approve-footer hidden" id="approve-footer" aria-label="Review submission footer">
+  <div class="footer-btn-group">
+    <button class="approve-btn" id="approve-btn" onclick="submitReview()">
+      Submit Review
+    </button>
+  </div>
+</footer>
 
 <!-- Toast -->
 <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
