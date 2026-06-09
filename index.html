@@ -746,6 +746,21 @@
     display: block;
   }
 
+  /* Approved highlight state (shown after Submit Review) */
+  .asset-card.approved-highlight {
+    border-color: #b8d9a0;
+    box-shadow: inset 0 0 0 3px #d4e8c2;
+  }
+  .approved-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(212, 232, 194, 0.50);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .asset-card.approved-highlight .approved-overlay { display: block; }
+
   /* Rejection state */
   .rejected-overlay {
     display: none;
@@ -1293,14 +1308,11 @@
     </div>
   </div>
 
-  <!-- Approve Footer (wireframe: Reject Styling | Reject | OR | Approve) -->
+  <!-- Submit Footer -->
   <footer class="approve-footer hidden" id="approve-footer" aria-label="Review submission footer">
     <div class="footer-btn-group">
-      <button class="btn-reject-styling" onclick="showToast('Reject Styling action sent.')">Reject Styling</button>
-      <button class="btn-reject" onclick="rejectSelected()">Reject</button>
-      <span class="footer-or">OR</span>
       <button class="approve-btn" id="approve-btn" onclick="submitReview()">
-        Approve
+        Submit Review
       </button>
     </div>
   </footer>
@@ -1564,6 +1576,7 @@
         </div>
         <div class="card-img-wrap">
           ${modelSVG(modelIdx)}
+          <div class="approved-overlay" aria-hidden="true"></div>
           <div class="rejected-overlay" aria-hidden="true"></div>
           <svg class="reject-x-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <line x1="8" y1="8" x2="92" y2="92" stroke="white" stroke-width="9" stroke-linecap="round"/>
@@ -1628,15 +1641,22 @@
     btn.disabled = true;
     btn.textContent = 'Submitting…';
 
+    // Highlight approved cards immediately on click
+    document.querySelectorAll('.asset-card').forEach(card => {
+      const idx = parseInt(card.dataset.index);
+      if (!rejectedCards.has(idx)) {
+        card.classList.add('approved-highlight');
+      }
+    });
+
     setTimeout(() => {
       showToast(`Review submitted! ${approved} assets approved, ${rejected} rejected.`);
       btn.disabled = false;
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Approve All &amp; Submit`;
-      // Mark first product as done and navigate back
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Submit Review`;
       rejectedCards.clear();
       updateStats();
       setTimeout(() => {
-        showView('queue');
+        location.reload();
       }, 1400);
     }, 900);
   }
