@@ -1748,8 +1748,74 @@
     buildQueueTable();
     buildAssetGrid();
     buildErrorTable();
-    // Boot directly into the Review (Gatekeeper) view
     showView('review');
+
+    // ── NUCLEAR SUBMIT BUTTON ──────────────────────────────
+    // Injected directly onto body with inline styles — nothing can hide this
+    const submitBar = document.createElement('div');
+    submitBar.id = 'nuclear-submit-bar';
+    submitBar.style.cssText = [
+      'position:fixed',
+      'bottom:0',
+      'left:400px',
+      'right:0',
+      'height:64px',
+      'background:#ffffff',
+      'border-top:1px solid #e5e7eb',
+      'box-shadow:0 -2px 12px rgba(0,0,0,0.08)',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'gap:16px',
+      'z-index:99999',
+      'font-family:inherit'
+    ].join(';');
+
+    const approvedSpan = document.createElement('span');
+    approvedSpan.id = 'nuclear-approved';
+    approvedSpan.style.cssText = 'font-size:13px;font-weight:600;color:#027a48;';
+    approvedSpan.textContent = '● 96 approved';
+
+    const rejectedSpan = document.createElement('span');
+    rejectedSpan.id = 'nuclear-rejected';
+    rejectedSpan.style.cssText = 'font-size:13px;font-weight:600;color:#e02020;';
+    rejectedSpan.textContent = '● 0 rejected';
+
+    const btn = document.createElement('button');
+    btn.id = 'nuclear-submit-btn';
+    btn.style.cssText = [
+      'padding:9px 32px',
+      'background:#0071ce',
+      'color:#fff',
+      'border:none',
+      'border-radius:24px',
+      'font-size:13px',
+      'font-weight:700',
+      'cursor:pointer',
+      'font-family:inherit',
+      'letter-spacing:0.2px'
+    ].join(';');
+    btn.textContent = 'Submit Review';
+    btn.onmouseover = () => { btn.style.background = '#005fa3'; };
+    btn.onmouseout  = () => { btn.style.background = '#0071ce'; };
+    btn.onclick = () => submitReview();
+
+    submitBar.appendChild(approvedSpan);
+    submitBar.appendChild(rejectedSpan);
+    submitBar.appendChild(btn);
+    document.body.appendChild(submitBar);
+
+    // Patch updateStats to also update the nuclear counters
+    const _origUpdate = updateStats;
+    updateStats = function() {
+      _origUpdate();
+      const approved = TOTAL_CARDS - rejectedCards.size;
+      const rejected = rejectedCards.size;
+      document.getElementById('nuclear-approved').textContent = `● ${approved} approved`;
+      document.getElementById('nuclear-rejected').textContent = `● ${rejected} rejected`;
+    };
+    updateStats();
+    // ──────────────────────────────────────────────────────
   });
 </script>
 </body>
